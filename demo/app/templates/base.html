@@ -1,0 +1,159 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} {% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+   
+</head>
+<body>
+    <div>
+        <div class="navbar-container border-bottom-light">
+            <div class="navbar py-4 d-flex justify-content-between flex-wrap  align-items-center container">
+                <div onclick="handleToggle()" class="bars-container  mr-sm-3 d-none"  >
+                    <div class='bars ' ></div>
+                </div>
+                <a class='logo mr-sm-auto' href="{% url 'index' %}">
+                    <img src='{% static "images/Logo.svg" %}' alt="" />
+                </a> 
+                <div class="search mx-auto my-sm-2">
+                    <input  type="text" />
+                    <img src='{% static "images/search.svg" %}' alt="" />
+                </div>
+                <div class="d-none nav-hidden-icons">
+                        <div class="user-icon-container   uic d-flex  align-items-center cursor">
+                            <i class="far fa-user"></i>
+                        </div>
+                        <div class="favourite-icon-container ml-sm-3 uic d-flex  align-items-center  cursor">
+                            <i class="far fa-heart"></i>
+                        </div>
+                        <div class="cart-icon-container ml-sm-3 d-flex uic  align-items-center cursor">
+                            <i class="fab fa-opencart"></i>
+                        </div>
+                    </div>
+                <div class="accaunt-navigator-container  d-flex">
+                    {% if user.is_authenticated and user.profile %}
+                    <a href=""  class="user-icon-container d-flex  align-items-center cursor">
+                        <i class="far fa-user"></i>
+                        <div class="ml-2 icon-title">{{user.username}}</div>
+                    </a> 
+                    {% else %}
+                    <a href=""  class="user-icon-container d-flex  align-items-center cursor">
+                        <i class="far fa-user"></i>
+                        <div class="ml-2 icon-title">Войти</div>
+                    </a>
+                    {% endif %}
+                    <div class="favourite-icon-container d-flex  align-items-center ml-4 cursor">
+                        <i class="far fa-heart"></i>
+                        <div class=" ml-2 icon-title">Избранное</div>
+                    </div>
+                    <div class="cart-icon-container d-flex  align-items-center ml-4 cursor">
+                        <i class="fab fa-opencart"></i>
+                        <div class=" ml-2 icon-title">Корзина</div>
+                    </div>
+                    {% if user.is_authenticated and user.profile %} 
+                    <a href=""  class="user-icon-container d-flex ml-4 align-items-center cursor">
+            
+                        <div class="ml-2 icon-title">Выйти</div>
+                    </a>
+                    {% endif %}
+                </div>
+              
+            </div>
+            <div class = ' accaunt-navigator-hidden-container d-none '>
+                <div class = 'accaunt-navigator-hidden bg-white border-top-light border-right-light  ' >
+                    <div class='hidden-menu-header'>
+                        <div class="border-bottom-light flex-wrap d-flex justify-content-between align-items-center py-2 container">
+                            <a class='logo' href="">
+                                <img src='{% static "images/Logo.svg" %}' alt="" />
+                            </a> 
+                            <i onclick="handleToggle()" class='fas fa-times'></i>
+                        </div>
+                    </div>
+                    <div class='main-hidden-supcategory-header'>
+                        <div class="border-bottom-light flex-wrap d-flex justify-content-between align-items-center py-2 container">
+                            <a class='logo' href="">
+                                <i class='fas fa-arrow-left' ></i>Sup Category
+                            </a> 
+                            <i class='fas fa-times'></i>
+                        
+                        </div>
+                    </div>
+                    <ul class='main-nav-hidden container'>
+                            <a href="" class='' >
+                                <li>Мужчины <i   class='fas fa-chevron-right'></i></li>
+                            </a >
+                            <a href="" class=''>
+                                <li>Женщины <i   class='fas fa-chevron-right'></i></li>
+                            </a>
+                            <a href="" class=''>
+                                <li>Дети <i   class='fas fa-chevron-right'></i></li>
+                            </a>
+                    </ul>
+
+                    <ul class='main-nav-hidden-supcategory hidden container'>
+                            <a href="">
+                                <li>Рубашка <i class="fas fa-chevron-right"></i></li>
+                                
+                            </a>
+                            <a href="">
+                                <li>Брюки <i class="fas fa-chevron-right"></i></li>
+                            </a>
+                            <a href="">
+                                <li>Футболка <i class="fas fa-chevron-right"></i></li>
+                            </a>
+                    </ul>
+                </div>
+            </div>
+            <nav >
+                <ul class='main-nav d-flex justify-content-center'>
+                    {% for mainCategory in mainCategories %}
+                    <li class='weight-500 py-2 px-3 size-17'>
+                        <a href="" class='sub-nav-title'> {{mainCategory.title}}</a>
+                        <ul class='sub-nav border-light  py-4 '>
+                            {% for parent in mainCategory.parents %}
+                                <li class='mx-4'>
+                                    <a href="">{{parent.title}}</a>
+                                    <ul class='mt-2 sub-nav-category'>
+                                        {% for category in parent.category_set.all %}
+                                            <a href="">
+                                                <li class='size-14'>{{category.title}}</li>
+                                            </a>
+                                        {% endfor %}
+                                     
+                                    </ul>
+                                </li>
+                            {% endfor %}
+                         
+                            
+    
+                        </ul>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </nav>
+          
+       </div>
+     
+    
+      
+    </div>
+   <!-- Main -->
+   <div class="">
+    {% block content %}
+        
+            
+    {% endblock %}
+    </div>
+
+    <script type="text/javascript" src="{% static 'js/script.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/index.js' %}"></script>
+    <script src="https://kit.fontawesome.com/92d93db707.js" crossorigin="anonymous"></script>
+
+</body>
+</html>
