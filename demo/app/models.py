@@ -31,6 +31,7 @@ class Brand(models.Model):
 
 class Color(models.Model):
     title = models.CharField('Цвет', max_length=256)
+    code = models.CharField('Hex', max_length=256, null=True)
 
 
     class Meta:
@@ -80,8 +81,6 @@ class Memory(models.Model):
 class ProductColor(models.Model):
     color = models.ForeignKey(Color, on_delete=models.CASCADE, verbose_name='Цвет', related_name='color_products')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Продукт')
-    size = models.ForeignKey(Memory, null=True,  on_delete=models.CASCADE, verbose_name='Память', related_name='memory_products')
-    price = models.IntegerField('Цена', default=0)
 
 
     class Meta:
@@ -99,6 +98,19 @@ class ProductGallery(models.Model):
     class Meta:
         verbose_name = 'Галерея'
         verbose_name_plural = 'Галерея'
+
+    def __str__(self):
+        return self.productColor.product.title
+
+
+class ProductColorSize(models.Model):
+    productColor = models.ForeignKey(ProductColor, on_delete=models.CASCADE, verbose_name='Продукт', related_name='product_productsColors')
+    memory = models.ForeignKey(Memory, null=True,  on_delete=models.CASCADE, verbose_name='Память', related_name='memory_productsColors')
+    price = models.IntegerField('Цена', default=0)
+
+    class Meta:
+        verbose_name = 'Цена продукта'
+        verbose_name_plural = 'Цены продукта'
 
     def __str__(self):
         return self.productColor.product.title

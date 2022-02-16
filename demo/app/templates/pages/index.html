@@ -6,8 +6,18 @@
    <!-- Main -->
 
   <div class="bg-light min-vh-100 ">
-    
-
+    <div class="bg-white rounded-1 p-4">
+      <div class="grid-5">
+        {% for product in products %}
+        <div class="product-box px-3 py-2 shadow-3 rounded-1">
+          <img class="w-100" src="{{product.image.url}}" alt="">
+          <div class="fs-18 b-1 mb-3">{{product.title}}</div>
+          <div class="hr-dark-night mt-0"></div>
+          <a href="{% url 'product_detail' product.id %}" class="btn btn-orange rounded-1">View</a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
   </div>
 
 {% endblock %}

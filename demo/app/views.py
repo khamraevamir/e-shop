@@ -1,12 +1,22 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from . models import Product
 from users.forms import CustomUserCreationForm
 from django.http import HttpResponse
 from django.core.exceptions import ValidationError
 from users.forms import CustomUserCreationForm
 
 def index(request):
-    return render(request, 'pages/index.html')
+    products = Product.objects.order_by('-id')
+    return render(request, 'pages/index.html', {'products':products})
+
+
+def product_detail(request, id):
+    product = Product.objects.get(id=id)
+    productColors = product.productcolor_set.all()
+   
+    
+    return render(request, 'pages/product-detail.html', {'productColors':productColors, 'product':product})
 
 
 def sign_in(request):
