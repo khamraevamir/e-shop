@@ -1,5 +1,8 @@
+from tabnanny import verbose
 from django.utils import timezone
 from django.db import models
+from django.conf import settings
+User = settings.AUTH_USER_MODEL
 
 
 
@@ -114,3 +117,17 @@ class ProductColorSize(models.Model):
 
     def __str__(self):
         return self.productColor.product.title
+
+
+
+class Cart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Юзер', related_name='user_carts' )
+    product = models.ForeignKey(ProductColorSize, on_delete=models.CASCADE, verbose_name='Продукт', related_name='cart_products')
+    quantity = models.IntegerField('Кол-во', default=0)
+
+    class Meta:
+        verbose_name = 'Корзина'
+        verbose_name_plural = 'Корзина'
+
+    def __str__(self):
+        return str(self.user) + " " + str(self.product)

@@ -19,6 +19,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     image = models.ImageField('Фото', blank=True, null=True)
     gender = models.CharField('Пол', max_length=256, blank=True,null=True)
     number = models.IntegerField('Номер телефона', blank=True, null=True)
+    pasport  = models.CharField('Серия Паспорта', max_length=256, null=True)
+    address = models.CharField('Адрес', max_length=256,null=True)
 
 
     USERNAME_FIELD = 'email'

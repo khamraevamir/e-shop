@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from . models import Product
+from . models import Product, ProductColor, ProductColorSize, Cart
 from users.forms import CustomUserCreationForm
 from django.http import HttpResponse
 from django.core.exceptions import ValidationError
 from users.forms import CustomUserCreationForm
+from django.views.decorators.csrf import csrf_exempt
 
 def index(request):
     products = Product.objects.order_by('-id')
@@ -17,6 +18,62 @@ def product_detail(request, id):
    
     
     return render(request, 'pages/product-detail.html', {'productColors':productColors, 'product':product})
+
+
+def cart(request):
+    cart = Cart.objects.filter(user=request.user)
+    return render(request, 'pages/cart.html', {'cart':cart})
+
+
+@csrf_exempt
+def cartPlus(request):
+    cart_id = request.POST.get('cart_id')
+
+    cart = Cart.objects.get(id=cart_id)
+
+    cart.quantity += 1
+    cart.save()
+    return HttpResponse('ok')
+
+
+@csrf_exempt
+def cartMinus(request):
+    cart_id = request.POST.get('cart_id')
+    quantity = request.POST.get('quantity')
+    
+    cart = Cart.objects.get(id=cart_id)
+
+    if quantity == '1':
+        cart.delete()
+        return HttpResponse('removed')
+    else:
+        cart.quantity -= 1
+        cart.save()
+        return HttpResponse('ok')
+        
+
+
+@csrf_exempt
+def addToCart(request):
+    user = request.user
+    data = request.POST.get('product')
+    product = ProductColorSize.objects.get(id=data)
+
+    if Cart.objects.filter(user=user).filter(product=product).exists():
+        cart = Cart.objects.filter(user=user).get(product=product)
+        
+        cart.quantity = cart.quantity + 1
+        cart.save()
+        return HttpResponse('exist')
+    else:
+        cart = Cart()
+        cart.product = product
+        cart.quantity = 1
+        cart.user = user
+        cart.save()
+        return HttpResponse('new')
+
+    
 
 
 def sign_in(request):
