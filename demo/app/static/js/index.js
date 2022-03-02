@@ -32,6 +32,7 @@ for(let item of cart_items){
 }
 
 document.querySelector('.cart_total').innerHTML = cart_total 
+document.querySelector('.hidden_total').value = cart_total 
 
 
 

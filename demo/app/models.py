@@ -131,3 +131,30 @@ class Cart(models.Model):
 
     def __str__(self):
         return str(self.user) + " " + str(self.product)
+
+
+
+class Order(models.Model):
+    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE, verbose_name='Юзер', related_name='user_orders' )
+    total = models.IntegerField('Total', default=0)
+    status = models.BooleanField('Status', default=False)
+
+    class Meta:
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказ'
+
+    def __str__(self):
+        return str(self.user) 
+
+
+class OrderProduct(models.Model):
+    order = models.ForeignKey(Order, on_delete = models.CASCADE)
+    product = models.ForeignKey(ProductColorSize, on_delete = models.SET_NULL, null=True)
+    product_count = models.IntegerField('Количество', default=0)
+
+    class Meta:
+        verbose_name = 'Order Product'
+        verbose_name_plural = 'Order Product'
+
+    def __str__(self):
+        return str(self.product) 

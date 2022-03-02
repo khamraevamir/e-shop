@@ -1,6 +1,8 @@
-from django.shortcuts import render, redirect
+from ast import Return
+from wsgiref.util import request_uri
+from django.shortcuts import render, redirect,reverse
 from django.contrib.auth import authenticate, login, logout
-from . models import Product, ProductColor, ProductColorSize, Cart
+from . models import Product, ProductColor, ProductColorSize, Cart, Order, OrderProduct
 from users.forms import CustomUserCreationForm
 from django.http import HttpResponse
 from django.core.exceptions import ValidationError
@@ -121,8 +123,38 @@ def sign_up(request):
         return render(request, 'pages/sign_up.html', {'form':form})
 
 
+def new_order(request):
+    if request.method == "POST":
+        total = request.POST.get('total')
+        if Cart.objects.filter(user = request.user).exists():
+            order = Order()
+            order.user = request.user
+            order.total = total
+            order.save()
+            for item in Cart.objects.filter(user = request.user):
+                orderProduct = OrderProduct()
+                orderProduct.order = order
+                orderProduct.product = item.product
+                orderProduct.product_count = item.quantity
+                orderProduct.save()
+
+        return redirect(reverse('order_detail', kwargs={'id':order.id}))
+
+
+     
+        
+
+def order_detail(request, id):
+    order = Order.objects.get(id=id)
+    return render(request, 'pages/order.html', {'order':order})
+    
+
+   
+
+
 def settings(request):
     return render(request, 'pages/settings/index.html')
+
 
 def user_data(request):
     return render(request, 'pages/settings/data.html')
@@ -130,3 +162,8 @@ def user_data(request):
 
 def workers(request):
     return render(request, 'pages/workers.html')
+
+
+
+
+    

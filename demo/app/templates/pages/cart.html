@@ -23,22 +23,30 @@
                         </div>
                         <div class="counting d-flex align-items-center">
                             <button  data-url="{% url 'cartMinus' %}" data-id="{{item.id}}" class="btn btn-grey cartMinus  rounded-1"><i class='bx bx-minus'></i></button>
-                            <input readonly class="input mx-2 w-25" value="{{item.quantity}}" type="text">
+                            <div class="mx-2 cart_input_parent">
+                                <input readonly  class="input cart_input_child{{item.id}} " value="{{item.quantity}}" type="text">
+                            </div>
                             <button data-url="{% url 'cartPlus' %}" data-id="{{item.id}}" class="btn btn-grey cartPlus rounded-1"><i class='bx bx-plus'></i></button>
                         </div>
-                        <div class="fs-20 b-2 "><span class="cart_price">{{item.product.price}}</span>$</div>
+                        <div  class="fs-20 b-2 ml-3 "><span id="{{item.id}}" class="cart_price">{{item.product.price}}</span>$</div>
                     </div>
                 </div>
             {% endfor %}
           </div>
           <div class="right w-25 p-3 inner-shadow-2 rounded-1 ml-auto">
               <div class="fs-23 b-2">Корзина</div>
+              
               <div class="hr-dark-light"></div>
               <div class="fs-16 b-2">Сумма: <span class="cart_quant"></span></div>
               <div class="fs-16 b-2">Кол-во: <span class="cart_quant"></span></div>
               <div class="fs-16 b-2">Доставка: <span class="cart_quant"></span></div>
               <div class="hr-dark-light"></div>
-              <div class="fs18 b-2">Итого: <span class="cart_total"></span>$</div>
+              <form action="{% url 'new_order' %}"  class="d-flex align-items-center" method="POST">
+                {% csrf_token %}
+                <div class="fs18 b-2">Итого: <span class="cart_total"></span>$</div>
+                <button class="btn btn-sm btn-orange rounded-1 ml-auto">Оформить заказ</button>
+                <input class="d-none hidden_total" name="total" type="text">
+              </form>
           </div>
       </div>
   </div>

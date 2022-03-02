@@ -29,12 +29,17 @@ $(function(){
 })
 
 
+
+
 $(function(){
     $('.cartPlus').on('click', function() {
         let btn = $(this)
         let token = $('[name = csrfmiddlewaretoken').val()
         let url = btn.attr('data-url')
         let cart_id = btn.attr('data-id')
+
+        let input_parent = btn.parent().find('.cart_input_parent')
+        
         
         
     
@@ -48,8 +53,35 @@ $(function(){
 
 
             success: (data)=>{
-                // $('.cart_parent').load( ' .cart_child ')
-                alert('Продукт изменен')
+                input_parent.load(` .cart_input_child${cart_id} `)
+
+                let cart_items = document.querySelectorAll('.cart_price')
+                cart_total = 0
+
+                for(let item of cart_items){
+
+                    let parent = item.parentElement.parentElement
+                    let quantity = 0
+                    
+                    if(item.id == cart_id){
+                        quantity = Number(parent.querySelector('.input').value) + 1
+                      
+                    } else {
+                        quantity = Number(parent.querySelector('.input').value)
+                    }
+                    let result = Number(item.innerHTML) * quantity
+
+                    cart_total += result
+                }
+
+                console.log(cart_total)
+
+                document.querySelector('.cart_total').innerHTML = cart_total 
+                document.querySelector('.hidden_total').value = cart_total 
+
+                
+
+               
             },
 
             error: (msg)=> {
@@ -69,7 +101,7 @@ $(function(){
         let url = btn.attr('data-url')
         let cart_id = btn.attr('data-id')
         let quantity = btn.parent().find('.input').val()
-        console.log(quantity)
+        let input_parent = btn.parent().find('.cart_input_parent')
 
         if(quantity == 1){
             btn.parent().parent().parent().remove()
@@ -85,8 +117,33 @@ $(function(){
 
 
             success: (data)=>{
-                // $('.cart_parent').load( ' .cart_child ')
-                console.log('minus')
+                input_parent.load(` .cart_input_child${cart_id} `)
+                
+                let cart_items = document.querySelectorAll('.cart_price')
+                cart_total = 0
+
+                for(let item of cart_items){
+
+                    let parent = item.parentElement.parentElement
+                    let quantity = 0
+                    
+                    if(item.id == cart_id){
+                        quantity = Number(parent.querySelector('.input').value) - 1
+                      
+                    } else {
+                        quantity = Number(parent.querySelector('.input').value)
+                    }
+                    let result = Number(item.innerHTML) * quantity
+
+                    cart_total += result
+                }
+
+                console.log(cart_total)
+
+                document.querySelector('.cart_total').innerHTML = cart_total 
+                document.querySelector('.hidden_total').value = cart_total 
+
+               
             },
 
             error: (msg)=> {
