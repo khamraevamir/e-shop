@@ -156,3 +156,51 @@ $(function(){
         
     })
 })
+
+
+
+
+
+// Edit produt color size
+
+$(function(){
+    $('.productColorSizeEdit').on('click', function() {
+      
+        let btn = $(this)
+        let token = $('[name = csrfmiddlewaretoken').val()
+        let url = btn.attr('data-url')
+        let id = btn.attr('data-id')
+        let price = btn.parent().parent().find('.price_input').val()
+
+        let price_input = btn.parent().parent().find('.price_input')
+       
+        $.ajax({
+            url:url,
+            type:'POST',
+            data:{id,price},
+            headers:{
+                'X-CSRFToken':token
+            },
+
+
+            success: (data)=>{
+                price_input.val(data)
+                btn.html('Изменено')
+                btn.removeClass('btn-blue')
+                btn.addClass('btn-green')
+
+                setTimeout(()=> {
+                    btn.html('Изменить')
+                    btn.addClass('btn-blue')
+                    btn.removeClass('btn-green')
+                },2000)
+            },
+
+            error: (msg)=> {
+                console.log(msg)
+            }
+        })  
+        
+    })
+})
+

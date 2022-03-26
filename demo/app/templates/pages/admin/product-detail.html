@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Settings {% endblock %}
+
+{% block content %}
+   <!-- Main -->
+
+
+    <div class="bg-light settings-page vh-100 bg-sm-none ">
+        <div class="container py-4">
+            {% include 'pages/settings/menu.html' %}
+            <div class=" bg-white shadow-2 rounded-1 p-4 mt-4 p-sm-0 ">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="fs-30 b-1">Продукты</div>
+                </div>
+                <div class="hr-dark-light"></div>
+                <table class="table table-light">
+                    <thead>
+                        <tr>
+                            <td class="text-center">#</td>
+                            <td>Цвет</td>
+                            <td>Память</td>
+                            <td>Действие</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in product.productcolor_set.all %}
+    
+                        <tr>
+                        <td class="text-center"><div class="p-3 border-dark-light rounded-1">{{forloop.counter}}</div></td>
+                        <td><div class="b-1 mr-2 p-3 border-dark-light rounded-1">{{item.color}}</div></td>
+                        <td>
+                    
+                            <div class="d-flex align-items-center gap-1">
+                                
+                            {% for memory in item.product_productsColors.all %}
+                                <div class="b-1 mr-2 p-3 border-dark-light rounded-1">{{memory.memory}}GB - {{memory.price}}$</div>
+                            {% empty %}
+                                <div class="b-1 mr-2 p-3 border-dark-light rounded-1">Отсутсвует</div>
+                            {% endfor %}
+                                
+
+                            <div class="modal-container product_memory_create_modal">
+                                <div class="modal p-4">
+                        
+                                            <form action="{% url 'admin_product_detail_memory_create' id=item.id productId=product.id %}" class="memory-form grid-1 gap-1" method="POST">
+                                                {% csrf_token %}
+                                                <div class="">
+                                                    <label for="" class="label">Память</label>
+                                                    <select name="size" class="input">
+                                                        {% for item in sizes %}
+                                                            <option value="{{item.id}}">{{item.size}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="">
+                                                <label for="" class="label">Цена</label>
+                                                <input name="price" type="text" class="input">
+                                            </div>
+                                                <button class="btn btn-blue rounded-1 mt-3 w-100">Добавить</button>
+
+                                            </form>
+                                        
+                                
+                                </div>
+                            </div>
+                        
+                            <div class="modal-container product_memory_edit_modal" >
+                                <div class="modal p-4" style="overflow-y: scroll; height: 400px;">
+                        
+                                            <div class="memory-form grid-1 gap-1" >
+                                                {% csrf_token %}
+                                                <div class="fs-20 b-2">Цвет</div>
+                                                <div class="hr-dark-light mt-1"></div>
+                                                <div class="grid-3 gap-1">
+                                                    <label for="" class="label">Память</label>
+                                                    <label for="" class="label">Цена</label>
+                                                    <label for="" class="label">Действие</label>
+
+                                                </div>
+                                                {% for memory in item.product_productsColors.all %}
+                                                <div class="grid-3 gap-1">
+                                                    <div class="">
+                                                        <input name="id" readonly value="{{memory.id}}" class="d-none" type="text">
+
+                                                        <input readonly value="{{memory.memory}}GB" class="input" type="text">
+                                                    </div>
+                                                    <div class="">
+                                                        <input  value="{{memory.price}}" class="input price_input" type="text">
+                                                    </div>
+                                                    <div class="">
+                                                        <button data-price="{{memory.price}}" data-id="{{memory.id}}" data-url="{% url 'admin_product_detail_memory_edit' %}" class="productColorSizeEdit btn btn-blue rounded-1">Изменить</button>
+                                                    </div>
+                                                </div>
+                                                {% endfor %}
+
+                                                <div class="hr-dark-light"></div>
+                                                
+                                                <button class="moreProductColor mb-5 btn btn-yellow rounded-1 w-25">Еще</button>
+                                                  
+                                                <div class="grid-2 gap-1">
+                                                    <label for="" class="label">Память</label>
+                                                    <label for="" class="label">Цена</label>
+                                                </div>
+                                                <div class="moreBoxContainer grid-1 gap-1">
+                                                    <div class="moreBox d-none grid-2 gap-1">
+                                                        <select class="input" name="" id="">
+                                                            {% for item in sizes %}
+                                                            <option value="{{item.id}}">{{item.size}}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        <input type="text" class="input">
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        
+                                
+                                </div>
+                            </div>
+
+
+                        </div>
+                        </td>
+                        <td>
+            
+                            {% if item.product_productsColors.count > 0 %}
+                                <button onclick="memoryEditModal()" class="w-100 btn btn-blue rounded-1">Изменить</button>
+                            {% else %}
+                                <button onclick="memoryCreateModal()" class="w-100 btn btn-green rounded-1">Создать</button>
+                            {% endif %}
+                        </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+{% endblock %}

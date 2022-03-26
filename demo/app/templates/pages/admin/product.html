@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Settings {% endblock %}
+
+{% block content %}
+   <!-- Main -->
+
+
+    <div class="bg-light settings-page py-4 min-vh-100 bg-sm-none ">
+        <div class="container">
+            {% include 'pages/settings/menu.html' %}
+            <div class="shadow-2 bg-white rounded-1 p-4 mt-4 p-sm-0 ">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="fs-30 b-1">Продукты</div>
+                        <a class="btn btn-green rounded-1" href="{% url 'product_create' %}">Добавить продукт</a>
+                    </div>
+                    <div class="hr-dark-light"></div>
+                    <table class="table table-light">
+                        <thead>
+                            <tr>
+                                <td class="text-center">#</td>
+                                <td>Наименование</td>
+                                <td>Цвет</td>
+                                <td>Действие</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in products %}
+                            <tr>
+                                <td class="text-center"><div class="p-3 border-dark-light rounded-1">{{forloop.counter}}</div></td>
+                                <td><div class="p-3 border-dark-light rounded-1">{{product.title}}</div></td>
+                                <td>
+                                    <div class="d-flex">
+                                        {% for item in product.productcolor_set.all %}
+                                            <div class="b-1 mr-2 p-3 border-dark-light rounded-1">{{item.color}}</div>
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                                <td>
+                                    <a href="{% url 'admin_product_detail' product.id %}" class="btn  btn-blue rounded-1">Посмотреть</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

@@ -60,7 +60,7 @@ class Product(models.Model):
 
     class Meta:
         verbose_name = 'Продукт'
-        verbose_name_plural = 'Продукты'
+        verbose_name_plural = 'Продукты(общий)'
 
     def __str__(self):
         return self.title
@@ -112,8 +112,8 @@ class ProductColorSize(models.Model):
     price = models.IntegerField('Цена', default=0)
 
     class Meta:
-        verbose_name = 'Цена продукта'
-        verbose_name_plural = 'Цены продукта'
+        verbose_name = 'Продукт'
+        verbose_name_plural = 'Продукты'
 
     def __str__(self):
         return self.productColor.product.title
@@ -158,3 +158,11 @@ class OrderProduct(models.Model):
 
     def __str__(self):
         return str(self.product) 
+
+
+
+class Storage(models.Model):
+    quantity = models.IntegerField('Кол-во товара в наличии', default = 0)  
+    productColorSize = models.ForeignKey(ProductColorSize, on_delete = models.SET_NULL, null=True, verbose_name="Продукт")   
+    storage_type = models.BooleanField(default=False) 
+    date = models.DateTimeField('Дата', default = timezone.now)

@@ -2,12 +2,14 @@ from ast import Return
 from wsgiref.util import request_uri
 from django.shortcuts import render, redirect,reverse
 from django.contrib.auth import authenticate, login, logout
-from . models import Product, ProductColor, ProductColorSize, Cart, Order, OrderProduct
+from . models import Brand, Category, Product, Memory, ProductColor, ProductColorSize, Cart, Order, OrderProduct, Color
 from users.forms import CustomUserCreationForm
 from django.http import HttpResponse
 from django.core.exceptions import ValidationError
 from users.forms import CustomUserCreationForm
 from django.views.decorators.csrf import csrf_exempt
+from django.core.files.storage import FileSystemStorage
+
 
 def index(request):
     products = Product.objects.order_by('-id')
@@ -166,4 +168,90 @@ def workers(request):
 
 
 
-    
+
+# Admin panel
+
+def admin_product(request):
+    products = Product.objects.order_by('-id')
+    return render(request, 'pages/admin/product.html', {'products':products})
+
+
+def admin_product_detail(request, id):
+    product = Product.objects.get(id=id)
+    sizes = Memory.objects.order_by('-id')
+    return render(request, 'pages/admin/product-detail.html', {'product':product, 'sizes':sizes})
+
+
+
+def admin_product_detail_memory_create(request,id, productId):
+    if request.method == "POST":
+        sizeId = request.POST.get('size')
+
+        productColor = ProductColor.objects.get(id=id)
+        price = request.POST.get('price')
+        size = Memory.objects.get(id=sizeId)
+
+        productColorSize = ProductColorSize()
+        productColorSize.price = price
+        productColorSize.memory = size
+        productColorSize.productColor = productColor
+        productColorSize.save()
+
+        return redirect(reverse('admin_product_detail', kwargs={'id':productId}))
+
+
+@csrf_exempt
+def admin_product_detail_memory_edit(request):
+    id = request.POST.get('id')
+    price = request.POST.get('price')
+
+    productColorSize = ProductColorSize.objects.get(id=id)
+
+    productColorSize.price = price
+    productColorSize.save()
+
+    return HttpResponse(price)
+      
+
+
+def product_create(request):
+    if request.method == 'POST':
+        
+        category = request.POST.get('category')  
+        brand = request.POST.get('brand')  
+        title = request.POST.get('title')  
+        year = request.POST.get('year')  
+        text = request.POST.get('text')  
+
+        colors_id = [int(item) for item in request.POST.getlist('colors[]')]
+
+        product = Product()
+        product.title = title
+        product.year = year
+        product.text = text
+        
+        product.category = Category.objects.get(id=category)
+        product.brand = Brand.objects.get(id=brand)
+        if request.POST.get('image') == '':
+            product.save()
+        else:
+            myfile = request.FILES['image']
+            fs = FileSystemStorage()
+            filename = fs.save(myfile.name, myfile)
+            product.image = filename
+            product.save()
+        
+
+        for color in colors_id:
+            productColor = ProductColor()
+            productColor.color = Color.objects.get(id=color)
+            productColor.product = product
+            productColor.save()
+
+        return redirect('admin_product')
+      
+    else:
+        brands = Brand.objects.order_by('-id')
+        categories = Category.objects.order_by('-id')
+        colors = Color.objects.order_by('-id')
+        return render(request, 'pages/admin/create-product.html',{'brands':brands,'categories':categories, 'colors':colors })

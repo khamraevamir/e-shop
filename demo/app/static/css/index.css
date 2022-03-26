@@ -2142,12 +2142,12 @@ a {
 
 
 .d-block {
-    display: block;
+    display: block !important;
 }
 
 
 .d-none {
-    display: none;
+    display: none !important;
 }
 
 

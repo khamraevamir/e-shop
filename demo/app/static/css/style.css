@@ -374,6 +374,12 @@
 } */
 
 
+/* Product create */
+
+.product_memory_edit_modal .modal{
+  width: 50%;
+}
+
 @media screen and (max-width: 539px) {
 
 

@@ -20,5 +20,14 @@ urlpatterns = [
     path('order-detail/<int:id>/', views.order_detail, name='order_detail'),
 
 
-    path('page/settings/index.html', views.settings, name='settings')
+    path('settings/index.html', views.settings, name='settings'),
+
+
+    # Admin panel
+    path('user/product', views.admin_product, name='admin_product'),
+    path('user/product/<int:id>', views.admin_product_detail, name='admin_product_detail'),
+    path('user/product-memory/<int:id>/<int:productId>', views.admin_product_detail_memory_create, name='admin_product_detail_memory_create'),
+    path('user/product-memory-edit/>', views.admin_product_detail_memory_edit, name='admin_product_detail_memory_edit'),
+
+    path('user/create/product', views.product_create, name='product_create')
 ]

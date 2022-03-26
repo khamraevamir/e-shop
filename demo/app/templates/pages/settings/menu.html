@@ -1,3 +1,32 @@
+{% if request.user.is_staff %}
+<div class=" bg-white profile-section rounded-1 p-4 shadow-2 p-sm-0 ">
+    <h2 class="mt-0 b-1 fs-30">Личный кабинет</h2>
+    <div class="hr-dark-light"></div>
+    <div class=" ">
+        <ul class=" d-flex flex-sm-wrap rounded-1    ">
+            <li class="mr-3 " >
+                <a class="  b-1 rounded-1 btn btn-blue b-1 "  href="{% url 'admin_product' %}"> 
+                    
+                    Продукты
+                </a>
+            </li>
+            <li class="mr-3 " >
+                <a class="  b-1 rounded-1 btn btn-blue b-1"  href=""> 
+                    Цвета
+                </a>
+            </li>
+          
+                <li class="mr-3 " >
+                <a class=" b-1 rounded-1 btn btn-blue b-1 "  href="">
+                   
+                    Память
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+{% else %}
 <div class=" bg-white profile-section rounded-1 p-4 shadow-2 p-sm-0 ">
     <h2 class="mt-0">Профиль</h2>
     <div class=" ">
@@ -34,3 +63,4 @@
         </ul>
     </div>
 </div>
+{% endif %}
