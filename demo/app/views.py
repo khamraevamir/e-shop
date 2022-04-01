@@ -183,6 +183,42 @@ def admin_product_detail(request, id):
 
 
 
+
+@csrf_exempt
+def admin_product_detail_memory_edit(request):
+    id = request.POST.get('id')
+    price = request.POST.get('price')
+
+    productColorSize = ProductColorSize.objects.get(id=id)
+
+    productColorSize.price = price
+    productColorSize.save()
+
+    return HttpResponse(price)
+      
+
+
+def admin_product_detail_memory_more(request, id, productId):
+    if request.method == 'POST':
+    
+        price = request.POST.getlist('price')
+        memory = request.POST.getlist('memory')
+
+     
+        productColor = ProductColor.objects.get(id=id)
+
+        for item in range(0, len(price)):
+            product = ProductColorSize()
+            product.price = price[item]
+            size = Memory.objects.get(id=memory[item])
+            product.memory = size
+            product.productColor = productColor
+
+            product.save()
+
+        return redirect(reverse('admin_product_detail', kwargs={'id':productId}))
+        
+
 def admin_product_detail_memory_create(request,id, productId):
     if request.method == "POST":
         sizeId = request.POST.get('size')
@@ -198,20 +234,13 @@ def admin_product_detail_memory_create(request,id, productId):
         productColorSize.save()
 
         return redirect(reverse('admin_product_detail', kwargs={'id':productId}))
+        
 
-
-@csrf_exempt
-def admin_product_detail_memory_edit(request):
-    id = request.POST.get('id')
-    price = request.POST.get('price')
-
-    productColorSize = ProductColorSize.objects.get(id=id)
-
-    productColorSize.price = price
-    productColorSize.save()
-
-    return HttpResponse(price)
       
+
+        
+
+        
 
 
 def product_create(request):

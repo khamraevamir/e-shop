@@ -278,24 +278,9 @@
 
 /* Modal navbar */
 
-.modal-container {
-  top: 0;
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.274);
-  display: none;
-  padding-top: 150px;
-  z-index: 999;
-}
 
 
-.modal-container .modal-box {
-  width: 350px;
-  background: #fff;
-  border-radius: 5px;
-  margin: 0 auto;
-}
+
 
 
 .modal-container .modal-box .signinText {

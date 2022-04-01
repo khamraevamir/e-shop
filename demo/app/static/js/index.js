@@ -46,39 +46,10 @@ for(let item of cart_items){
 
 
 
-let memoryCreateModal = () => {
-    let parent = window.event.target.parentElement.parentElement
-    console.log(parent)
-    parent.querySelector('.product_memory_create_modal').classList.add('d-block')
-}
-
-
-let memoryEditModal = () => {
-    let parent = window.event.target.parentElement.parentElement
-    console.log(parent)
-    parent.querySelector('.product_memory_edit_modal').classList.add('d-block')
-}
 
 
 
-let moreBtns = document.querySelectorAll('.moreProductColor')
 
 
 
-for(let btn of moreBtns){
-    btn.addEventListener('click', (e)=> {
 
-        let moreBoxContainer = e.target.parentElement.querySelector('.moreBoxContainer')
-       
-        let box = document.querySelector('.moreBox')
-        let clone = box.cloneNode(true)
-
-        clone.classList.remove('d-none')
-
-        moreBoxContainer.appendChild(clone)
-
-        
-
-    
-    })
-}

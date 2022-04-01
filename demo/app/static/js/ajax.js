@@ -163,37 +163,87 @@ $(function(){
 
 // Edit produt color size
 
+
+
+
+$(document).on("click",".productColorSizeEdit",function(){
+    let btn = $(this)
+    let token = $('[name = csrfmiddlewaretoken').val()
+    let url = btn.attr('data-url')
+    let id = btn.attr('data-id')
+    let price = btn.parent().parent().find('.price_input').val()
+
+    let price_input = btn.parent().parent().find('.price_input')
+
+    let parentRefresh = $('.editParentRefresh')
+
+    
+  
+   
+    $.ajax({
+        url:url,
+        type:'POST',
+        data:{id,price},
+        headers:{
+            'X-CSRFToken':token
+        },
+
+
+        success: (data)=>{
+            price_input.val(data)
+            btn.html('Изменено')
+            btn.removeClass('btn-blue')
+            btn.addClass('btn-green')
+
+            setTimeout(()=> {
+                btn.html('Изменить')
+                btn.addClass('btn-blue')
+                btn.removeClass('btn-green')
+            },2000)
+      
+            parentRefresh.load(location.href + ` .editRefresh`)
+
+            
+        },
+
+        error: (msg)=> {
+            console.log(msg)
+        }
+    })  
+    
+})
+
+
+
+
 $(function(){
-    $('.productColorSizeEdit').on('click', function() {
+    $('.productColorSizeAdd').on('click', function() {
       
         let btn = $(this)
         let token = $('[name = csrfmiddlewaretoken').val()
         let url = btn.attr('data-url')
         let id = btn.attr('data-id')
-        let price = btn.parent().parent().find('.price_input').val()
 
-        let price_input = btn.parent().parent().find('.price_input')
+        let price = btn.parent().find('.productColorSizePrice')[1]
+        let memory = btn.parent().find('.productColorSizeMemory')[1]
+
+      
+        price = price.value
+        memory = memory.value
+      
+     
        
         $.ajax({
             url:url,
             type:'POST',
-            data:{id,price},
+            data:{id,price,memory},
             headers:{
                 'X-CSRFToken':token
             },
 
 
             success: (data)=>{
-                price_input.val(data)
-                btn.html('Изменено')
-                btn.removeClass('btn-blue')
-                btn.addClass('btn-green')
-
-                setTimeout(()=> {
-                    btn.html('Изменить')
-                    btn.addClass('btn-blue')
-                    btn.removeClass('btn-green')
-                },2000)
+                console.log(data)
             },
 
             error: (msg)=> {
@@ -203,4 +253,8 @@ $(function(){
         
     })
 })
+
+
+
+
 
