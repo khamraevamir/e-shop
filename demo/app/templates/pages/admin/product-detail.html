@@ -36,12 +36,26 @@
                             </td>
                             <!-- Memory -->
                             <td>
-                                <div class="d-flex align-items-center gap-1">
+                                <div class="grid-5 align-items-center gap-1">
                                     
                                     {% for memory in item.product_productsColors.all %}
-                                        <div class="b-1 mr-2 p-3 border-dark-light rounded-1">{{memory.memory}}GB - {{memory.price}}$</div>
-                                    {% empty %}
-                                        <div class="b-1 mr-2 p-3 border-dark-light rounded-1">Отсутсвует</div>
+                                        {% if memory.price == 0 %}
+                                            <div class="b-1 mr-2 p-3 border-red rounded-1">{{memory.memory}}GB - Нету</div>
+                                        {% else %}
+                                            <div class="memery_scene">
+                                                <div class="memory_box">
+                                                    <div class="memory_box_front b-1 bg-white px-2  border-green rounded-1">{{memory.memory}}GB - {{memory.price}}$</div>
+                                                    <div class="memory_box_back b-1 px-2 border-dark-light   bg-white rounded-1">
+                                                        <input type="text" value="{{memory.price}}" class="input w-80">
+                                                        <div class="memory_btns  ">
+                                                            <button class=" top  btn-sm">E</button>
+                                                            <button class=" bottom  btn-sm">D</button>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
                                     {% endfor %}
                                         
                                 </div>

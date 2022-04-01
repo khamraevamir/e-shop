@@ -48,7 +48,15 @@ for(let item of cart_items){
 
 
 
+let memory_boxes = document.querySelectorAll('.memory_box')
 
+for(let box of memory_boxes){
+   
+    box.addEventListener('click', ()=> {
+        box.classList.add('active')
+     
+    })
+}
 
 
 
