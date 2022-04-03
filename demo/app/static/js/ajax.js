@@ -164,58 +164,6 @@ $(function(){
 // Edit produt color size
 
 
-
-
-$(document).on("click",".productColorSizeEdit",function(){
-    let btn = $(this)
-    let token = $('[name = csrfmiddlewaretoken').val()
-    let url = btn.attr('data-url')
-    let id = btn.attr('data-id')
-    let price = btn.parent().parent().find('.price_input').val()
-
-    let price_input = btn.parent().parent().find('.price_input')
-
-    let parentRefresh = $('.editParentRefresh')
-
-    
-  
-   
-    $.ajax({
-        url:url,
-        type:'POST',
-        data:{id,price},
-        headers:{
-            'X-CSRFToken':token
-        },
-
-
-        success: (data)=>{
-            price_input.val(data)
-            btn.html('Изменено')
-            btn.removeClass('btn-blue')
-            btn.addClass('btn-green')
-
-            setTimeout(()=> {
-                btn.html('Изменить')
-                btn.addClass('btn-blue')
-                btn.removeClass('btn-green')
-            },2000)
-      
-            parentRefresh.load(location.href + ` .editRefresh`)
-
-            
-        },
-
-        error: (msg)=> {
-            console.log(msg)
-        }
-    })  
-    
-})
-
-
-
-
 $(function(){
     $('.productColorSizeAdd').on('click', function() {
       
@@ -258,3 +206,55 @@ $(function(){
 
 
 
+
+
+// Start
+
+$(document).on("click",".productColorSizeEdit",function(){
+    let btn = $(this)
+    let token = $('[name = csrfmiddlewaretoken').val()
+    let url = btn.attr('data-url')
+    let id = btn.attr('data-id')
+    let price = btn.parent().parent().find('.input').val()
+
+   
+    let refreh_parent = btn.parent().parent().parent().find('.refreshParent')
+
+    let box = btn.parent().parent().parent().find('.memory_box_front')
+   
+    $.ajax({
+        url:url,
+        type:'POST',
+        data:{id, price},
+        headers:{
+            'X-CSRFToken':token
+        },
+
+
+        success: (data)=>{
+            
+            btn.parent().parent().parent().removeClass('active')
+
+            // setTimeout(()=> {
+              
+            // },2000)
+      
+            refreh_parent.load(location.href + ` .refreshChild${id}`)
+
+            if(price == '0'){
+                box.removeClass('border-green')
+                box.addClass('border-red')
+            }else{
+                box.removeClass('border-red')
+                box.addClass('border-green')
+            }
+
+            
+        },
+
+        error: (msg)=> {
+            console.log(msg)
+        }
+    })  
+    
+})

@@ -360,7 +360,7 @@
 
 /* Admin Product  Detail */
 
-.memery_scene {
+.memory_scene {
   perspective: 800px;
   cursor: pointer;
 
@@ -408,8 +408,9 @@
   right: 0;
   top: 0;
   width: 28px;
-  height: 28px;
+  height: 100%;
   border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -417,6 +418,12 @@
   border: none;
   color: #fff;
   cursor: pointer;
+}
+
+
+.memory_box .memory_btns .top .deg {
+  
+  transform: rotate(90deg);
 }
 
 

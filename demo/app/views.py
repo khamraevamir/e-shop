@@ -198,42 +198,42 @@ def admin_product_detail_memory_edit(request):
       
 
 
-def admin_product_detail_memory_more(request, id, productId):
-    if request.method == 'POST':
+# def admin_product_detail_memory_more(request, id, productId):
+#     if request.method == 'POST':
     
-        price = request.POST.getlist('price')
-        memory = request.POST.getlist('memory')
+#         price = request.POST.getlist('price')
+#         memory = request.POST.getlist('memory')
 
      
-        productColor = ProductColor.objects.get(id=id)
+#         productColor = ProductColor.objects.get(id=id)
 
-        for item in range(0, len(price)):
-            product = ProductColorSize()
-            product.price = price[item]
-            size = Memory.objects.get(id=memory[item])
-            product.memory = size
-            product.productColor = productColor
+#         for item in range(0, len(price)):
+#             product = ProductColorSize()
+#             product.price = price[item]
+#             size = Memory.objects.get(id=memory[item])
+#             product.memory = size
+#             product.productColor = productColor
 
-            product.save()
+#             product.save()
 
-        return redirect(reverse('admin_product_detail', kwargs={'id':productId}))
+#         return redirect(reverse('admin_product_detail', kwargs={'id':productId}))
         
 
-def admin_product_detail_memory_create(request,id, productId):
-    if request.method == "POST":
-        sizeId = request.POST.get('size')
+# def admin_product_detail_memory_create(request,id, productId):
+#     if request.method == "POST":
+#         sizeId = request.POST.get('size')
 
-        productColor = ProductColor.objects.get(id=id)
-        price = request.POST.get('price')
-        size = Memory.objects.get(id=sizeId)
+#         productColor = ProductColor.objects.get(id=id)
+#         price = request.POST.get('price')
+#         size = Memory.objects.get(id=sizeId)
 
-        productColorSize = ProductColorSize()
-        productColorSize.price = price
-        productColorSize.memory = size
-        productColorSize.productColor = productColor
-        productColorSize.save()
+#         productColorSize = ProductColorSize()
+#         productColorSize.price = price
+#         productColorSize.memory = size
+#         productColorSize.productColor = productColor
+#         productColorSize.save()
 
-        return redirect(reverse('admin_product_detail', kwargs={'id':productId}))
+#         return redirect(reverse('admin_product_detail', kwargs={'id':productId}))
         
 
       
@@ -272,10 +272,17 @@ def product_create(request):
         
 
         for color in colors_id:
-            productColor = ProductColor()
-            productColor.color = Color.objects.get(id=color)
-            productColor.product = product
-            productColor.save()
+            productColorItem = ProductColor()
+            productColorItem.color = Color.objects.get(id=color)
+            productColorItem.product = product
+            productColorItem.save()
+
+        
+            for size in Memory.objects.all():
+                productColorSize = ProductColorSize()
+                productColorSize.memory = size
+                productColorSize.productColor = productColorItem
+                productColorSize.save()
 
         return redirect('admin_product')
       

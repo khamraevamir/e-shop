@@ -54,6 +54,7 @@ for(let box of memory_boxes){
    
     box.addEventListener('click', ()=> {
         box.classList.add('active')
+        console.log('ok')
      
     })
 }
