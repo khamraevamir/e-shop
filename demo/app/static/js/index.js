@@ -62,3 +62,47 @@ for(let box of memory_boxes){
 
 
 
+
+let addProductColor = document.querySelector('.addProductColor')
+let addProductColorContainer = document.querySelector('.addProductColorContainer')
+
+addProductColor.addEventListener('click', ()=> {
+    if(addProductColor.innerHTML == 'Отменить'){
+        addProductColorContainer.classList.add('d-none')
+        addProductColor.className = 'btn btn-green rounded-1 addProductColor'
+        addProductColor.innerHTML = 'Добавить цвет' 
+    } else {
+        addProductColorContainer.classList.remove('d-none')
+        addProductColor.className = 'btn btn-grey rounded-1 addProductColor'
+        addProductColor.innerHTML = 'Отменить'
+    }
+
+
+})
+
+
+
+// // Table 
+// let tableColors = document.querySelectorAll('.tableColors')
+
+
+
+// // Select
+// let selectColors = document.querySelectorAll('.colorsSelect')
+
+// let colorsSelectContainer = document.querySelector('.colorsSelectContainer')
+
+
+// let result = selectColors.length - tableColors.length - 1 
+
+
+
+// selectColors.forEach((value, index) => {
+//     if(result < index){
+//         colorsSelectContainer.removeChild(value)
+//     }
+// })
+
+
+
+

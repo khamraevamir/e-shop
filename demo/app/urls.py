@@ -28,6 +28,8 @@ urlpatterns = [
     path('user/product/<int:id>', views.admin_product_detail, name='admin_product_detail'),
     # True
     path('user/product-memory-edit/>', views.admin_product_detail_memory_edit, name='admin_product_detail_memory_edit'),
+    path('user/create/productColor/<int:id>/', views.productColor_create, name='productColor_create'),
+
 
 
 

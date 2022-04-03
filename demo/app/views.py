@@ -1,4 +1,5 @@
 from ast import Return
+from turtle import color
 from wsgiref.util import request_uri
 from django.shortcuts import render, redirect,reverse
 from django.contrib.auth import authenticate, login, logout
@@ -179,7 +180,9 @@ def admin_product(request):
 def admin_product_detail(request, id):
     product = Product.objects.get(id=id)
     sizes = Memory.objects.order_by('-id')
-    return render(request, 'pages/admin/product-detail.html', {'product':product, 'sizes':sizes})
+
+    colors = Color.objects.order_by('-id')
+    return render(request, 'pages/admin/product-detail.html', {'product':product, 'sizes':sizes, 'colors':colors})
 
 
 
@@ -291,3 +294,26 @@ def product_create(request):
         categories = Category.objects.order_by('-id')
         colors = Color.objects.order_by('-id')
         return render(request, 'pages/admin/create-product.html',{'brands':brands,'categories':categories, 'colors':colors })
+
+
+
+def productColor_create(request, id):
+    if request.method == 'POST':
+        colorId = request.POST.get('colorId')
+
+        color = Color.objects.get(id=colorId)
+        product = Product.objects.get(id=id)
+
+        productColorItem = ProductColor()
+        productColorItem.product = product
+        productColorItem.color = color
+        productColorItem.save()
+
+        for size in Memory.objects.all():
+            productColorSize = ProductColorSize()
+            productColorSize.memory = size
+            productColorSize.productColor = productColorItem
+            productColorSize.save()
+
+
+        return redirect(reverse('admin_product_detail', kwargs={'id':id}))
