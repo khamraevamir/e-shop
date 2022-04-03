@@ -29,6 +29,9 @@ urlpatterns = [
     # True
     path('user/product-memory-edit/>', views.admin_product_detail_memory_edit, name='admin_product_detail_memory_edit'),
     path('user/create/productColor/<int:id>/', views.productColor_create, name='productColor_create'),
+    path('user/delete/productColor/<int:id>/', views.productColor_delete, name='productColor_delete'),
+
+    path('user/gallery/productColor/<int:id>/', views.productColor_gallery, name='productColor_gallery'),
 
 
 

@@ -3,7 +3,7 @@ from turtle import color
 from wsgiref.util import request_uri
 from django.shortcuts import render, redirect,reverse
 from django.contrib.auth import authenticate, login, logout
-from . models import Brand, Category, Product, Memory, ProductColor, ProductColorSize, Cart, Order, OrderProduct, Color
+from . models import Brand, Category, Product, Memory, ProductGallery, ProductColor, ProductColorSize, Cart, Order, OrderProduct, Color
 from users.forms import CustomUserCreationForm
 from django.http import HttpResponse
 from django.core.exceptions import ValidationError
@@ -187,65 +187,6 @@ def admin_product_detail(request, id):
 
 
 
-@csrf_exempt
-def admin_product_detail_memory_edit(request):
-    id = request.POST.get('id')
-    price = request.POST.get('price')
-
-    productColorSize = ProductColorSize.objects.get(id=id)
-
-    productColorSize.price = price
-    productColorSize.save()
-
-    return HttpResponse(price)
-      
-
-
-# def admin_product_detail_memory_more(request, id, productId):
-#     if request.method == 'POST':
-    
-#         price = request.POST.getlist('price')
-#         memory = request.POST.getlist('memory')
-
-     
-#         productColor = ProductColor.objects.get(id=id)
-
-#         for item in range(0, len(price)):
-#             product = ProductColorSize()
-#             product.price = price[item]
-#             size = Memory.objects.get(id=memory[item])
-#             product.memory = size
-#             product.productColor = productColor
-
-#             product.save()
-
-#         return redirect(reverse('admin_product_detail', kwargs={'id':productId}))
-        
-
-# def admin_product_detail_memory_create(request,id, productId):
-#     if request.method == "POST":
-#         sizeId = request.POST.get('size')
-
-#         productColor = ProductColor.objects.get(id=id)
-#         price = request.POST.get('price')
-#         size = Memory.objects.get(id=sizeId)
-
-#         productColorSize = ProductColorSize()
-#         productColorSize.price = price
-#         productColorSize.memory = size
-#         productColorSize.productColor = productColor
-#         productColorSize.save()
-
-#         return redirect(reverse('admin_product_detail', kwargs={'id':productId}))
-        
-
-      
-
-        
-
-        
-
-
 def product_create(request):
     if request.method == 'POST':
         
@@ -296,7 +237,6 @@ def product_create(request):
         return render(request, 'pages/admin/create-product.html',{'brands':brands,'categories':categories, 'colors':colors })
 
 
-
 def productColor_create(request, id):
     if request.method == 'POST':
         colorId = request.POST.get('colorId')
@@ -317,3 +257,78 @@ def productColor_create(request, id):
 
 
         return redirect(reverse('admin_product_detail', kwargs={'id':id}))
+
+
+@csrf_exempt
+def admin_product_detail_memory_edit(request):
+    id = request.POST.get('id')
+    price = request.POST.get('price')
+
+    productColorSize = ProductColorSize.objects.get(id=id)
+
+    productColorSize.price = price
+    productColorSize.save()
+
+    return HttpResponse(price)
+      
+
+
+def productColor_delete(request, id):
+    if request.method == 'POST':
+        answer = request.POST.get('answer')
+        
+        if answer == 'delete':
+            productColors = request.POST.getlist('productColor')
+      
+            for item_id in productColors:
+                productColor = ProductColor.objects.get(id=item_id)
+                productColor.delete()
+        
+    
+        
+        return redirect(reverse('admin_product_detail', kwargs={'id':id}))
+
+
+def productColor_gallery(request, id):
+    productColor = ProductColor.objects.get(id=id)
+    gallery = ProductGallery.objects.filter(productColor=productColor)
+    return render(request, 'pages/admin/product-detail-gallery.html',  {'gallery':gallery})
+
+
+# def admin_product_detail_memory_more(request, id, productId):
+#     if request.method == 'POST':
+    
+#         price = request.POST.getlist('price')
+#         memory = request.POST.getlist('memory')
+
+     
+#         productColor = ProductColor.objects.get(id=id)
+
+#         for item in range(0, len(price)):
+#             product = ProductColorSize()
+#             product.price = price[item]
+#             size = Memory.objects.get(id=memory[item])
+#             product.memory = size
+#             product.productColor = productColor
+
+#             product.save()
+
+#         return redirect(reverse('admin_product_detail', kwargs={'id':productId}))
+        
+
+# def admin_product_detail_memory_create(request,id, productId):
+#     if request.method == "POST":
+#         sizeId = request.POST.get('size')
+
+#         productColor = ProductColor.objects.get(id=id)
+#         price = request.POST.get('price')
+#         size = Memory.objects.get(id=sizeId)
+
+#         productColorSize = ProductColorSize()
+#         productColorSize.price = price
+#         productColorSize.memory = size
+#         productColorSize.productColor = productColor
+#         productColorSize.save()
+
+#         return redirect(reverse('admin_product_detail', kwargs={'id':productId}))
+        

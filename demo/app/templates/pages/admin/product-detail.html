@@ -24,16 +24,18 @@
                 </div>
             </div>
             <div class="hr-dark-light"></div>
-                <div class="d-flex align-items-end  mb-3 ">
+                <form action="{% url 'productColor_delete' product.id %}" class="" method="POST">
+                    {% csrf_token %}
+                    <div class="d-flex align-items-end  mb-3 ">
                         <div class="">
                             <label class="label ">Выберите действие</label>
-                            <select class="input" name="" id="">
+                            <select  class="input" name="answer" id="">
                                 <option value="none">-----</option>
                                 <option value="delete">Удалить</option>
                             </select>
                         </div>
                         <button class="btn btn-primary rounded-1 ml-3">Выполнить</button>
-                </div>
+                    </div>
                 <table class="table table-light editRefresh">
                     <thead>
                         <tr>
@@ -41,7 +43,7 @@
                             <td class="text-center">#</td>
                             <td>Цвет</td>
                             <td>Память</td>
-                    
+                            <td></td>
                         </tr>
                     </thead>
                     <tbody>
@@ -49,15 +51,15 @@
                         {% for item in product.productcolor_set.all %}
                         <tr>
                             <td>
-                                <input type="checkbox">
+                                <input type="checkbox" value="{{item.id}}" name="productColor">
                             </td>
                             <!-- Counter -->
                             <td class="text-center">
-                                <div class="p-3 border-dark-light rounded-1">{{forloop.counter}}</div>
+                                <div class="py-2 px-3 border-dark-light rounded-1">{{forloop.counter}}</div>
                             </td>
                             <!-- Product Color -->
                             <td>
-                                <div class="b-1 mr-2 p-3 border-dark-light rounded-1 tableColors">{{item.color}}</div>
+                                <div class="b-1 mr-2 py-2 px-3 border-dark-light rounded-1 tableColors">{{item.color}}</div>
                             </td>
                             <!-- Memory -->
                             <td class="w-100">
@@ -65,17 +67,17 @@
                                     
                                     {% for memory in item.product_productsColors.all %}
                                         {% if memory.price == 0 %}
-                                        <div class="memory_scene ">
+                                        <div class="memory_scene fs-13">
                                             <div class="memory_box ">
-                                                <div class="memory_box_front b-1 bg-white px-3 d-flex justify-content-between border-red rounded-1">
+                                                <div class="memory_box_front b-1  bg-white px-3 d-flex justify-content-between border-red rounded-1">
                                                     {{memory.memory}}GB 
                                                     <div class="refreshParent">
                                                         <span class="refreshChild{{memory.id}}">Нету</span>
                                                     </div>
                                                 </div>
-                                                <div class="memory_box_back b-1 px-2 border-dark-light   bg-white rounded-1">
+                                                <div class="memory_box_back b-1    bg-white rounded-1">
                                                     <input type="text" value="{{memory.price}}" class="input w-80">
-                                                    <div class="memory_btns  ">
+                                                    <div class="memory_btns  w-20">
                                                         <!-- Ajax -->
                                                         <button type="button" data-url="{% url 'admin_product_detail_memory_edit' %}" data-id="{{memory.id}}" class=" top productColorSizeEdit  btn-sm">E</button>
                                                        
@@ -86,7 +88,7 @@
                                         </div>
                                         {% else %}
                                       
-                                            <div class="memory_scene ">
+                                            <div class="memory_scene fs-13">
                                                 <div class="memory_box ">
                                                     <div class="memory_box_front b-1 bg-white px-3 d-flex justify-content-between border-green rounded-1">
                                                         {{memory.memory}}GB 
@@ -94,9 +96,9 @@
                                                             <span class="refreshChild{{memory.id}}">{{memory.price}}$</span>
                                                         </div>
                                                     </div>
-                                                    <div class="memory_box_back b-1 px-2 border-dark-light   bg-white rounded-1">
+                                                    <div class="memory_box_back b-1    bg-white rounded-1">
                                                         <input type="text" value="{{memory.price}}" class="input w-80">
-                                                        <div class="memory_btns  ">
+                                                        <div class="memory_btns  w-20">
                                                             <!-- Ajax -->
                                                             <button type="button" data-url="{% url 'admin_product_detail_memory_edit' %}" data-id="{{memory.id}}" class=" top productColorSizeEdit  btn-sm">E</button>
                                                             
@@ -111,10 +113,15 @@
                                         
                                 </div>
                             </td>
+                            <td>
+                                <a href="{% url 'productColor_gallery' item.id %}" class="btn  btn-yellow rounded-1 ml-2">галлерея</a>
+
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
+                </form>
     
         </div>
     </div>

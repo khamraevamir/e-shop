@@ -37,7 +37,11 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <a href="{% url 'admin_product_detail' product.id %}" class="btn  btn-blue rounded-1">Посмотреть</a>
+                                    <div class="d-flex">
+                                        <a href="{% url 'admin_product_detail' product.id %}" class="btn  btn-blue rounded-1">Посмотреть</a>
+                                        <a href="" class="btn  btn-yellow rounded-1 ml-2">Фото</a>
+                                    </div>
+
                                 </td>
                             </tr>
                             {% endfor %}
