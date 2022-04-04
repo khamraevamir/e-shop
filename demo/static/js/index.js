@@ -63,23 +63,79 @@ for(let box of memory_boxes){
 
 
 
-let addProductColor = document.querySelector('.addProductColor')
-let addProductColorContainer = document.querySelector('.addProductColorContainer')
+if(document.querySelector('.addProductColor') !== null){
+    let addProductColor = document.querySelector('.addProductColor')
+    let addProductColorContainer = document.querySelector('.addProductColorContainer')
+    
+    addProductColor.addEventListener('click', ()=> {
+    
+        if(addProductColor.innerHTML == 'Отменить'){
+            addProductColorContainer.classList.add('d-none')
+            addProductColor.className = 'btn btn-green rounded-1 addProductColor'
+            addProductColor.innerHTML = 'Добавить цвет' 
+        } else {
+            addProductColorContainer.classList.remove('d-none')
+            addProductColor.className = 'btn btn-grey rounded-1 addProductColor'
+            addProductColor.innerHTML = 'Отменить'
+        }
+    
+    
+    })
+    
+    
+}
 
-addProductColor.addEventListener('click', ()=> {
-    if(addProductColor.innerHTML == 'Отменить'){
-        addProductColorContainer.classList.add('d-none')
-        addProductColor.className = 'btn btn-green rounded-1 addProductColor'
-        addProductColor.innerHTML = 'Добавить цвет' 
-    } else {
-        addProductColorContainer.classList.remove('d-none')
-        addProductColor.className = 'btn btn-grey rounded-1 addProductColor'
-        addProductColor.innerHTML = 'Отменить'
-    }
 
 
+
+if(document.querySelector('.addImage') !== null){
+    let addImage = document.querySelector('.addImage')
+    let inputFileContainer = document.querySelector('.inputFileContainer')
+
+ 
+
+
+    addImage.addEventListener('click', (e)=> {
+
+
+       
+
+        let box = document.createElement('div')
+        box.className = 'd-flex w-50'
+
+        let input = document.createElement('input')
+        input.setAttribute('type', 'file')
+        input.setAttribute('name', 'image[]')
+        input.className = 'input'
+
+        // let btn = document.createElement('button') 
+        // btn.className = 'btn btn-green rounded-1 ml-2'
+        // btn.innerHTML = 'Добавить'
+
+        let btnRemove = document.createElement('button') 
+        btnRemove.className = 'btn btn-grey rounded-1 ml-2'
+        btnRemove.innerHTML = 'Удалить'
+        btnRemove.setAttribute('type', 'button')
+
+        btnRemove.addEventListener('click', (e)=> {
+            let parent = e.target.parentElement
+            inputFileContainer.removeChild(parent)
+            
+        })
+
+        box.appendChild(input)
+        // box.appendChild(btn)
+        box.appendChild(btnRemove)
+        
+
+        inputFileContainer.appendChild(box)
+
+        if(inputFileContainer.querySelector('.btn-blue').classList.contains('d-none')){
+            inputFileContainer.querySelector('.btn-blue').classList.remove('d-none')
+        }
 })
 
+}
 
 
 // // Table 

@@ -32,6 +32,9 @@ urlpatterns = [
     path('user/delete/productColor/<int:id>/', views.productColor_delete, name='productColor_delete'),
 
     path('user/gallery/productColor/<int:id>/', views.productColor_gallery, name='productColor_gallery'),
+    path('user/gallery/productColor/<int:id>/create', views.productColor_gallery_create, name='productColor_gallery_create'),
+    path('user/gallery/productColor/remove', views.productColor_gallery_remove, name='productColor_gallery_remove'),
+
 
 
 

@@ -292,7 +292,35 @@ def productColor_delete(request, id):
 def productColor_gallery(request, id):
     productColor = ProductColor.objects.get(id=id)
     gallery = ProductGallery.objects.filter(productColor=productColor)
-    return render(request, 'pages/admin/product-detail-gallery.html',  {'gallery':gallery})
+    return render(request, 'pages/admin/product-detail-gallery.html',  {'gallery':gallery, 'productColor':productColor})
+
+
+
+def productColor_gallery_create(request, id):
+    if request.method == 'POST':
+        productColor = ProductColor.objects.get(id=id)
+        images = request.FILES.getlist('image[]')
+        for image in images:
+            gallery = ProductGallery()
+            gallery.productColor = productColor
+            myfile = image
+            fs = FileSystemStorage()
+            filename = fs.save(myfile.name, myfile)
+            gallery.image = filename
+            gallery.save()  
+        return redirect(reverse('productColor_gallery', kwargs={'id':id}))
+
+
+@csrf_exempt
+def productColor_gallery_remove(request):
+  
+    imageId = request.POST.get('imageId')
+
+    productColor = ProductGallery.objects.get(id=imageId)
+    productColor.delete()
+
+    return HttpResponse('ok')
+
 
 
 # def admin_product_detail_memory_more(request, id, productId):

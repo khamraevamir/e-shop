@@ -258,3 +258,32 @@ $(document).on("click",".productColorSizeEdit",function(){
     })  
     
 })
+
+
+
+$(document).on("click",".btnGalleryRemove",function(){
+    let btn = $(this)
+    let token = $('[name = csrfmiddlewaretoken').val()
+    let url = btn.attr('data-url')
+    let imageId = btn.attr('data-imageId')
+   
+   
+    $.ajax({
+        url:url,
+        type:'POST',
+        data:{imageId},
+        headers:{
+            'X-CSRFToken':token
+        },
+
+
+        success: (data)=>{
+            btn.parent().addClass('d-none')
+        },
+
+        error: (msg)=> {
+            console.log(msg)
+        }
+    })  
+    
+})

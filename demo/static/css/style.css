@@ -444,6 +444,29 @@
 }
 
 
+.galleryItem {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.galleryItem .btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(100%,0);
+  transition: 300ms ease-in-out;
+}
+
+.galleryItem:hover .btn {
+  transform: translate(0);
+}
+
+.galleryItem img {
+  height: 100%;
+  
+}
+
 
 .product_memory_edit_modal .modal{
   width: 50%;
