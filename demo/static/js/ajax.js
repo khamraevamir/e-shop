@@ -220,6 +220,7 @@ $(document).on("click",".productColorSizeEdit",function(){
 
    
     let refreh_parent = btn.parent().parent().parent().find('.refreshParent')
+    let refreh_parent2 = btn.parent().parent().parent().find('.refreshParent2')
 
     let box = btn.parent().parent().parent().find('.memory_box_front')
    
@@ -241,6 +242,7 @@ $(document).on("click",".productColorSizeEdit",function(){
             // },2000)
       
             refreh_parent.load(location.href + ` .refreshChild${id}`)
+            refreh_parent2.load(location.href + ` .refreshChild2${id}`)
 
             if(price == '0' || data == '0'){
                 box.removeClass('border-green')

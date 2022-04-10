@@ -69,8 +69,10 @@
                                         {% if memory.price == 0 %}
                                         <div class="memory_scene fs-13">
                                             <div class="memory_box ">
-                                                <div class="memory_box_front b-1  bg-white px-3 d-flex flex-column flex-column justify-content-between border-red rounded-1">
-                                                    <div class="">{{memory.memory}}GB </div>
+                                                <div class="memory_box_front b-1  bg-white px-3 d-flex  justify-content-between border-red rounded-1">
+                                                    <div class="refreshParent2">
+                                                        <span class="refreshChild2{{memory.id}}">{{memory.memory}}GB </span>
+                                                    </div>
                                                     <div class="refreshParent">
                                                         <span class="refreshChild{{memory.id}}">Нет в наличии</span>
                                                     </div>
@@ -90,7 +92,10 @@
                                         <div class="memory_scene fs-13">
                                             <div class="memory_box ">
                                                 <div class="memory_box_front b-1  bg-white px-3 d-flex flex-column justify-content-between border-red rounded-1">
-                                                    <div class="">{{memory.memory}}GB {{memory.price}}$</div>
+                                    
+                                                    <div class="refreshParent2">
+                                                        <span class="refreshChild2{{memory.id}}">{{memory.memory}}GB {{memory.price}}$ </span>
+                                                    </div>
                                                     <div class="refreshParent">
                                                         <span class="refreshChild{{memory.id}}">Нет в наличии</span>
                                                     </div>
@@ -111,7 +116,9 @@
                                             <div class="memory_scene fs-13">
                                                 <div class="memory_box ">
                                                     <div class="memory_box_front b-1 bg-white px-3 d-flex justify-content-between border-green rounded-1">
-                                                        {{memory.memory}}GB 
+                                                        <div class="refreshParent2">
+                                                            <span class="refreshChild2{{memory.id}}">{{memory.memory}}GB </span>
+                                                        </div>
                                                         <div class="refreshParent">
                                                             <span class="refreshChild{{memory.id}}">{{memory.price}}$</span>
                                                         </div>
