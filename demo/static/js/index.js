@@ -28,21 +28,23 @@ let codify = () => {
 }
 
 
-
-let cart_items = document.querySelectorAll('.cart_price')
-let cart_total = 0
-
-for(let item of cart_items){
-
-    let parent = item.parentElement.parentElement
-    let quantity = Number(parent.querySelector('.input').value)
-    let result = Number(item.innerHTML) * quantity
-
-    cart_total += result
+if(document.querySelector('.cart_price') !== null){
+    let cart_items = document.querySelectorAll('.cart_price')
+    let cart_total = 0
+    
+    for(let item of cart_items){
+    
+        let parent = item.parentElement.parentElement
+        let quantity = Number(parent.querySelector('.input').value)
+        let result = Number(item.innerHTML) * quantity
+    
+        cart_total += result
+    }
+    
+    document.querySelector('.cart_total').innerHTML = cart_total 
+    document.querySelector('.hidden_total').value = cart_total 
+    
 }
-
-// document.querySelector('.cart_total').innerHTML = cart_total 
-// document.querySelector('.hidden_total').value = cart_total 
 
 
 
@@ -84,7 +86,6 @@ if(document.querySelector('.addProductColor') !== null){
     
     
 }
-
 
 
 
@@ -137,28 +138,52 @@ if(document.querySelector('.addImage') !== null){
 
 }
 
+if(document.querySelector('.storageModal') !== null){
+    let storageModalBtn = document.querySelectorAll('.storageModal')
 
-// // Table 
-// let tableColors = document.querySelectorAll('.tableColors')
+    for(let item of storageModalBtn){
+        item.addEventListener('click', (e)=> {
+            let productId = Number(item.id)
+            let modal = document.querySelector('.storageModalContainer')
+            modal.classList.toggle('d-none')
 
-
-
-// // Select
-// let selectColors = document.querySelectorAll('.colorsSelect')
-
-// let colorsSelectContainer = document.querySelector('.colorsSelectContainer')
-
-
-// let result = selectColors.length - tableColors.length - 1 
-
-
-
-// selectColors.forEach((value, index) => {
-//     if(result < index){
-//         colorsSelectContainer.removeChild(value)
-//     }
-// })
+            let modalForm = modal.querySelector('.form')
+            modalForm.setAttribute('action', `${productId}/`)
+        })
+    }
+}
 
 
+if(document.querySelector('.modalMain') !== null){
+    let btnMain = document.querySelector('.btnMain')
+
+    btnMain.addEventListener('click', (e)=> {
+
+        let target = e.target
+        let imageSrc = target.getAttribute('data-img')
+        let productId = target.getAttribute('data-id')
+
+        console.log(imageSrc)
+
+        let modal =  document.querySelector('.modalMain')
+        modal.classList.remove('d-none')
+
+        let image = modal.querySelector('.w-100')
+        let form = modal.querySelector('.form')
+        image.setAttribute('src', `${imageSrc}`)
+        form.setAttribute('action', `/user/product-image/${productId}/`)
+
+    })
+}
 
 
+
+$(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+
+
+
+$(document).ready( function () {
+    $('#myTable2').DataTable();
+} );

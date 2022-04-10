@@ -96,7 +96,7 @@ class ProductColor(models.Model):
 
 class ProductGallery(models.Model):
     productColor = models.ForeignKey(ProductColor, on_delete=models.CASCADE, verbose_name='Продукт', related_name='gallery_products')
-    image = models.ImageField('Фото продукта', upload_to='productColor gallery', blank=True)
+    image = models.ImageField('Фото продукта', upload_to='productColor_gallery', blank=True)
 
     class Meta:
         verbose_name = 'Галерея'
@@ -115,8 +115,15 @@ class ProductColorSize(models.Model):
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
 
+
+    def real_count(self):
+        income = sum([storage.quantity for storage in self.storage_set.filter(storage_type = True)])
+        consumption = sum([storage.quantity for storage in self.storage_set.filter(storage_type = False)])
+        result = income - consumption
+        return result
+
     def __str__(self):
-        return self.productColor.product.title
+        return  str(self.productColor.product) + ' ' + str(self.memory)+ 'GB' + ' ' + str(self.productColor.color.title)
 
 
 
@@ -163,6 +170,6 @@ class OrderProduct(models.Model):
 
 class Storage(models.Model):
     quantity = models.IntegerField('Кол-во товара в наличии', default = 0)  
-    productColorSize = models.ForeignKey(ProductColorSize, on_delete = models.SET_NULL, null=True, verbose_name="Продукт")   
+    productColorSize = models.ForeignKey(ProductColorSize, on_delete = models.SET_NULL,   null=True, verbose_name="Продукт")   
     storage_type = models.BooleanField(default=False) 
     date = models.DateTimeField('Дата', default = timezone.now)

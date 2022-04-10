@@ -468,6 +468,11 @@
 }
 
 
+.modalMain img {
+  height: 100px;
+  object-fit: cover;
+}
+
 .product_memory_edit_modal .modal{
   width: 50%;
 }

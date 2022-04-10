@@ -69,10 +69,30 @@
                                         {% if memory.price == 0 %}
                                         <div class="memory_scene fs-13">
                                             <div class="memory_box ">
-                                                <div class="memory_box_front b-1  bg-white px-3 d-flex justify-content-between border-red rounded-1">
-                                                    {{memory.memory}}GB 
+                                                <div class="memory_box_front b-1  bg-white px-3 d-flex flex-column flex-column justify-content-between border-red rounded-1">
+                                                    <div class="">{{memory.memory}}GB </div>
                                                     <div class="refreshParent">
-                                                        <span class="refreshChild{{memory.id}}">Нету</span>
+                                                        <span class="refreshChild{{memory.id}}">Нет в наличии</span>
+                                                    </div>
+                                                </div>
+                                                <div class="memory_box_back b-1    bg-white rounded-1">
+                                                    <input type="text" value="{{memory.price}}" class="input w-80">
+                                                    <div class="memory_btns  w-20">
+                                                        <!-- Ajax -->
+                                                        <button type="button" data-url="{% url 'admin_product_detail_memory_edit' %}" data-id="{{memory.id}}" class=" top productColorSizeEdit  btn-sm">E</button>
+                                                       
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% elif memory.real_count == 0 %}
+                                        <div class="memory_scene fs-13">
+                                            <div class="memory_box ">
+                                                <div class="memory_box_front b-1  bg-white px-3 d-flex flex-column justify-content-between border-red rounded-1">
+                                                    <div class="">{{memory.memory}}GB {{memory.price}}$</div>
+                                                    <div class="refreshParent">
+                                                        <span class="refreshChild{{memory.id}}">Нет в наличии</span>
                                                     </div>
                                                 </div>
                                                 <div class="memory_box_back b-1    bg-white rounded-1">

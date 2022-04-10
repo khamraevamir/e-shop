@@ -37,22 +37,23 @@ $(function(){
         let token = $('[name = csrfmiddlewaretoken').val()
         let url = btn.attr('data-url')
         let cart_id = btn.attr('data-id')
-
+        let quantity = btn.parent().find('.input').val()
         let input_parent = btn.parent().find('.cart_input_parent')
         
-        
+    
         
     
         $.ajax({
             url:url,
             type:'POST',
-            data:{cart_id},
+            data:{cart_id, quantity},
             headers:{
                 'X-CSRFToken':token
             },
 
 
             success: (data)=>{
+                console.log(data)
                 input_parent.load(` .cart_input_child${cart_id} `)
 
                 let cart_items = document.querySelectorAll('.cart_price')
@@ -74,7 +75,7 @@ $(function(){
                     cart_total += result
                 }
 
-                console.log(cart_total)
+          
 
                 document.querySelector('.cart_total').innerHTML = cart_total 
                 document.querySelector('.hidden_total').value = cart_total 
@@ -241,7 +242,7 @@ $(document).on("click",".productColorSizeEdit",function(){
       
             refreh_parent.load(location.href + ` .refreshChild${id}`)
 
-            if(price == '0'){
+            if(price == '0' || data == '0'){
                 box.removeClass('border-green')
                 box.addClass('border-red')
             }else{

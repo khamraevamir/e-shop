@@ -1,15 +1,16 @@
-from ast import Return
-from turtle import color
-from wsgiref.util import request_uri
+
+
+from opcode import stack_effect
 from django.shortcuts import render, redirect,reverse
 from django.contrib.auth import authenticate, login, logout
-from . models import Brand, Category, Product, Memory, ProductGallery, ProductColor, ProductColorSize, Cart, Order, OrderProduct, Color
+from . models import Brand, Category, Product, Memory, ProductGallery, ProductColor, ProductColorSize, Cart, Order, OrderProduct, Color, Storage
 from users.forms import CustomUserCreationForm
 from django.http import HttpResponse
 from django.core.exceptions import ValidationError
 from users.forms import CustomUserCreationForm
 from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import FileSystemStorage
+from django.db.models import Count, Q
 
 
 def index(request):
@@ -20,7 +21,7 @@ def index(request):
 def product_detail(request, id):
     product = Product.objects.get(id=id)
     productColors = product.productcolor_set.all()
-   
+    
     
     return render(request, 'pages/product-detail.html', {'productColors':productColors, 'product':product})
 
@@ -33,13 +34,29 @@ def cart(request):
 @csrf_exempt
 def cartPlus(request):
     cart_id = request.POST.get('cart_id')
+    quantity = request.POST.get('quantity')
 
     cart = Cart.objects.get(id=cart_id)
 
-    cart.quantity += 1
-    cart.save()
-    return HttpResponse('ok')
 
+
+    productColorSize = cart.product
+
+    income = sum([storage.quantity for storage in productColorSize.storage_set.filter(storage_type = True)])
+    consumption = sum([storage.quantity for storage in productColorSize.storage_set.filter(storage_type = False)])
+    count = income - consumption
+
+
+
+    if count == cart.quantity:
+        return HttpResponse('limited')
+    else:
+        cart.quantity += 1
+        cart.save()
+        
+        return HttpResponse('added')
+    
+   
 
 @csrf_exempt
 def cartMinus(request):
@@ -56,7 +73,6 @@ def cartMinus(request):
         cart.save()
         return HttpResponse('ok')
         
-
 
 @csrf_exempt
 def addToCart(request):
@@ -78,8 +94,8 @@ def addToCart(request):
         cart.save()
         return HttpResponse('new')
 
-    
 
+# Auth
 
 def sign_in(request):
     message = None
@@ -126,6 +142,8 @@ def sign_up(request):
         return render(request, 'pages/sign_up.html', {'form':form})
 
 
+# Order
+
 def new_order(request):
     if request.method == "POST":
         total = request.POST.get('total')
@@ -141,19 +159,20 @@ def new_order(request):
                 orderProduct.product_count = item.quantity
                 orderProduct.save()
 
+                storage = Storage()
+                storage.productColorSize = item.product
+                storage.quantity = item.quantity
+                storage.save()
+
         return redirect(reverse('order_detail', kwargs={'id':order.id}))
-
-
-     
-        
+    
 
 def order_detail(request, id):
     order = Order.objects.get(id=id)
     return render(request, 'pages/order.html', {'order':order})
     
 
-   
-
+# User
 
 def settings(request):
     return render(request, 'pages/settings/index.html')
@@ -163,14 +182,23 @@ def user_data(request):
     return render(request, 'pages/settings/data.html')
 
 
-def workers(request):
-    return render(request, 'pages/workers.html')
-
-
-
-
-
 # Admin panel
+
+def admin_product_image_edit(request, id):
+    if request.method == "POST":
+        product = Product.objects.get(id=id)
+        if request.POST.get('image') == '':
+            product.save()
+        else:
+            myfile = request.FILES['image']
+            fs = FileSystemStorage()
+            filename = fs.save(myfile.name, myfile)
+            product.image = filename
+            product.save()
+
+        return redirect('admin_product')
+
+
 
 def admin_product(request):
     products = Product.objects.order_by('-id')
@@ -183,8 +211,6 @@ def admin_product_detail(request, id):
 
     colors = Color.objects.order_by('-id')
     return render(request, 'pages/admin/product-detail.html', {'product':product, 'sizes':sizes, 'colors':colors})
-
-
 
 
 def product_create(request):
@@ -228,6 +254,11 @@ def product_create(request):
                 productColorSize.productColor = productColorItem
                 productColorSize.save()
 
+                storage = Storage()
+                storage.productColorSize = productColorSize
+                storage.save()
+
+
         return redirect('admin_product')
       
     else:
@@ -266,12 +297,15 @@ def admin_product_detail_memory_edit(request):
 
     productColorSize = ProductColorSize.objects.get(id=id)
 
+    income = sum([storage.quantity for storage in productColorSize.storage_set.filter(storage_type = True)])
+    consumption = sum([storage.quantity for storage in productColorSize.storage_set.filter(storage_type = False)])
+    count = income - consumption
+
     productColorSize.price = price
     productColorSize.save()
 
-    return HttpResponse(price)
+    return HttpResponse(count)
       
-
 
 def productColor_delete(request, id):
     if request.method == 'POST':
@@ -293,7 +327,6 @@ def productColor_gallery(request, id):
     productColor = ProductColor.objects.get(id=id)
     gallery = ProductGallery.objects.filter(productColor=productColor)
     return render(request, 'pages/admin/product-detail-gallery.html',  {'gallery':gallery, 'productColor':productColor})
-
 
 
 def productColor_gallery_create(request, id):
@@ -320,6 +353,67 @@ def productColor_gallery_remove(request):
     productColor.delete()
 
     return HttpResponse('ok')
+
+
+
+def storage(request):
+    products = ProductColorSize.objects.order_by('-id')
+    return render(request, 'pages/admin/storage.html', {'products':products})
+
+
+def storage_reload(request, id):
+    if request.method == 'POST': 
+        product = ProductColorSize.objects.get(id = id)
+        quantity = request.POST.get('quantity')
+
+        product.storage_set.create(
+            storage_type = request.POST.get('answer'),
+            quantity = quantity,
+        )
+
+
+        # storage = Storage()
+        # storage.productColorSize = product
+        # storage.storage_type = request.POST.get('storage_type'),
+        # storage.quantity = quantity
+        # storage.save()
+        
+        return redirect('storage') 
+
+
+
+def storage_detail(request, id):
+    product = ProductColorSize.objects.get(id=id)
+
+    storage = Storage.objects.filter(productColorSize=product)
+    
+    return render(request, 'pages/admin/storage-detail.html', {'storage':storage})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
