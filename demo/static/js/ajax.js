@@ -290,3 +290,68 @@ $(document).on("click",".btnGalleryRemove",function(){
     })  
     
 })
+
+
+
+// Product Color Size
+
+
+$(document).on("click",".productColorSizeDeleteBtn",function(){
+    let btn = $(this)
+    let token = $('[name = csrfmiddlewaretoken').val()
+    let url = btn.attr('data-url')
+    let productId = btn.attr('data-id')
+   
+   
+    $.ajax({
+        url:url,
+        type:'POST',
+        data: {productId},
+        headers:{
+            'X-CSRFToken':token
+        },
+
+
+        success: (data)=>{
+            btn.parent().addClass('d-none')
+        },
+
+        error: (msg)=> {
+            console.log(msg)
+        }
+    })  
+    
+})
+
+
+
+$(document).on("click",".productColorSize_edit",function(){
+    let btn = $(this)
+    let token = $('[name = csrfmiddlewaretoken').val()
+    let url = btn.attr('data-url')
+    let productId = btn.attr('data-id')
+    let price = btn.parent().find('.input_price').val()
+
+    console.log(url)
+   
+    $.ajax({
+        url:url,
+        type:'POST',
+        data: {productId, price},
+        headers:{
+            'X-CSRFToken':token
+        },
+
+
+        success: (data)=>{
+            btn.parent().parent().find('.refreshPrice').val(data)
+            btn.parent().addClass('d-none')
+            btn.parent().parent().find('.initial_form').removeClass('d-none')
+        },
+
+        error: (msg)=> {
+            console.log(msg)
+        }
+    })  
+    
+})

@@ -206,11 +206,11 @@ def admin_product(request):
 
 
 def admin_product_detail(request, id):
-    product = Product.objects.get(id=id)
-    sizes = Memory.objects.order_by('-id')
+    productColor = ProductColor.objects.get(id=id)
+    sizes = Memory.objects.order_by('size')
 
     colors = Color.objects.order_by('-id')
-    return render(request, 'pages/admin/product-detail.html', {'product':product, 'sizes':sizes, 'colors':colors})
+    return render(request, 'pages/admin/product-detail.html', {'productColor':productColor, 'sizes':sizes, 'colors':colors})
 
 
 def product_create(request):
@@ -248,15 +248,15 @@ def product_create(request):
             productColorItem.save()
 
         
-            for size in Memory.objects.all():
-                productColorSize = ProductColorSize()
-                productColorSize.memory = size
-                productColorSize.productColor = productColorItem
-                productColorSize.save()
+        #     for size in Memory.objects.all():
+        #         productColorSize = ProductColorSize()
+        #         productColorSize.memory = size
+        #         productColorSize.productColor = productColorItem
+        #         productColorSize.save()
 
-                storage = Storage()
-                storage.productColorSize = productColorSize
-                storage.save()
+        #         storage = Storage()
+        #         storage.productColorSize = productColorSize
+        #         storage.save()
 
 
         return redirect('admin_product')
@@ -268,10 +268,46 @@ def product_create(request):
         return render(request, 'pages/admin/create-product.html',{'brands':brands,'categories':categories, 'colors':colors })
 
 
+def productColorSize_create(request, id):
+    if request.method == 'POST':
+        sizeId = request.POST.get('sizeId')
+        price = request.POST.get('price')
+
+        memory = Memory.objects.get(id=sizeId)
+        productColor = ProductColor.objects.get(id=id)
+
+        productColorSize = ProductColorSize()
+        productColorSize.productColor = productColor
+        productColorSize.memory = memory
+        productColorSize.price = price
+        productColorSize.save()
+
+    
+        return redirect(reverse('admin_product_detail', kwargs={'id':id}))
+
+
+@csrf_exempt
+def productColorSize_delete(request):
+    productId = request.POST.get('productId')
+    productColorSize = ProductColorSize.objects.get(id=productId)
+    productColorSize.delete()
+    return HttpResponse('ok')
+
+
+@csrf_exempt
+def productColorSize_edit(request):
+ 
+    productId = request.POST.get('productId')
+    price = request.POST.get('price')
+    productColorSize = ProductColorSize.objects.get(id=productId)
+    productColorSize.price = price
+    productColorSize.save()
+    return HttpResponse(price)
+
+
 def productColor_create(request, id):
     if request.method == 'POST':
         colorId = request.POST.get('colorId')
-
         color = Color.objects.get(id=colorId)
         product = Product.objects.get(id=id)
 
@@ -279,15 +315,12 @@ def productColor_create(request, id):
         productColorItem.product = product
         productColorItem.color = color
         productColorItem.save()
+        return redirect(reverse('productColor_create', kwargs={'id':id}))
 
-        for size in Memory.objects.all():
-            productColorSize = ProductColorSize()
-            productColorSize.memory = size
-            productColorSize.productColor = productColorItem
-            productColorSize.save()
-
-
-        return redirect(reverse('admin_product_detail', kwargs={'id':id}))
+    else:
+        product = Product.objects.get(id=id)
+        colors = Color.objects.order_by('title')
+        return render(request, 'pages/admin/color-detail.html', {'product':product, 'colors':colors})
 
 
 @csrf_exempt

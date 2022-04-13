@@ -27,13 +27,21 @@ urlpatterns = [
     path('user/product', views.admin_product, name='admin_product'),
     path('user/product-image/<int:id>/', views.admin_product_image_edit, name='admin_product_image_edit'),
 
-    path('user/product/<int:id>', views.admin_product_detail, name='admin_product_detail'),
+    path('user/product-color/<int:id>', views.admin_product_detail, name='admin_product_detail'),
     path('user/create/product', views.product_create, name='product_create'),
-    # Product Color Size
-    path('user/product-memory-edit/>', views.admin_product_detail_memory_edit, name='admin_product_detail_memory_edit'),
+    
+    # Product Color 
     path('user/create/productColor/<int:id>/', views.productColor_create, name='productColor_create'),
     path('user/delete/productColor/<int:id>/', views.productColor_delete, name='productColor_delete'),
+
+    # Product Color size
+    path('user/create/productColorSize/<int:id>/', views.productColorSize_create, name='productColorSize_create'),
+    path('user/delete/productColorSize/', views.productColorSize_delete, name='productColorSize_delete'),
+    path('user/edit/productColorSize/', views.productColorSize_edit, name='productColorSize_edit'),
+
+
     # Product Color Size Gallery
+
     path('user/gallery/productColor/<int:id>/', views.productColor_gallery, name='productColor_gallery'),
     path('user/gallery/productColor/<int:id>/create', views.productColor_gallery_create, name='productColor_gallery_create'),
     path('user/gallery/productColor/remove', views.productColor_gallery_remove, name='productColor_gallery_remove'),

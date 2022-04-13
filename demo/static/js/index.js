@@ -178,6 +178,33 @@ if(document.querySelector('.modalMain') !== null){
 
 
 
+if(document.querySelectorAll('.productColorSizeEditBtn') !== null){
+    let editBtns = document.querySelectorAll('.productColorSizeEditBtn')
+
+    for(let btn of editBtns){
+        btn.addEventListener('click', ()=> {
+            btn.parentElement.classList.add('d-none')
+            btn.parentElement.parentElement.querySelector('.form_edit').classList.remove('d-none')
+        })
+    }
+}
+
+
+if(document.querySelectorAll('.productColorSizeCancelBtn') !== null){
+    let cancelBtns = document.querySelectorAll('.productColorSizeCancelBtn')
+
+    for(let btn of cancelBtns){
+        btn.addEventListener('click', ()=> {
+            btn.parentElement.classList.add('d-none')
+            btn.parentElement.parentElement.querySelector('.initial_form').classList.remove('d-none')
+        })
+    }
+}
+
+ 
+
+
+
 $(document).ready( function () {
     $('#myTable').DataTable();
 } );
